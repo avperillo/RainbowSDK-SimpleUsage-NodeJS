@@ -53,11 +53,12 @@ class Router {
             }
     
             app.use(cors());
+            app.use(express.json());
     
             this.defineRoute();
     
             // Define default route to bot
-            app.use("/botsample", router);
+            app.use("/massbot", router);
         });
     }
 
@@ -85,10 +86,28 @@ class Router {
             res.status(200).send({"code": 0, "data": {"status": this.sdk.state, "version": this.sdk.version}});
         });
 
-        /**
-         * TO DO
-         * Add more route to your bot if needed
-         */
+        router.post('/call/makeCall', (req, res) => {
+            logger.log("debug", LOG_ID + "endpoint POST /sdk/call/makeCall: " + JSON.stringify(req.body, null, 2));
+
+            this.sdk.makeCall(req.body.email, req.body.phone).then(call => {
+                let respObject = {status: call.status, id: call.id, connectionId: call.connectionId, type: call.type};
+                res.status(200).send({code: 0, message: "makeCall OK", data: respObject });
+            }).catch(err => {
+                res.status(500).send({code: -1, message: "makeCall KO", data: err });
+            });
+          
+        });
+
+        router.post('/call/makeCallPhoneNumber', (req, res) => {
+            logger.log("debug", LOG_ID + "endpoint POST /makeCallPhoneNumber: " + JSON.stringify(req.body, null, 2));
+
+            this.sdk.makeCallPhoneNumber(req.body.phone).then(call => {
+                res.status(200).send({code: 0, message: "MakeCallPhoneNumber OK", data: call });
+            }).catch(err => {
+                res.status(500).send({code: -1, message: "MakeCallPhoneNumber KO", data: err });
+            });
+          
+        });
 
     }
 

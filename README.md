@@ -52,19 +52,23 @@ $ node index.js
 
 ## Server API
 
-Your Node.JS contains an embedded server with 3 default routes:
+Your Node.JS contains an embedded server with 5 default routes:
 
-- `GET .../botsample/ping`: API for having an health check of your application
+- `GET .../massbot/ping`: API for having an health check of your application
 
-- `POST .../botsample/sdk/restart`: API for restarting the SDK for Node.JS (stop and start).
+- `POST .../massbot/sdk/restart`: API for restarting the SDK for Node.JS (stop and start).
 
-- `GET .../botsample/sdk/status`: API for having a status of the SDK for Node.JS
+- `GET .../massbot/sdk/status`: API for having a status of the SDK for Node.JS
 
-You can test these routes using CURL. Here is an example of testing the `botsample/ping` route when the Web Server is launched using `HTTP` and port `3002`:
+- `POST .../massbot/call/makeCallPhoneNumber`: API for call to phone number
+
+- `POST .../massbot/call/makeCall`: API for call to a Rainbow contact.
+
+You can test these routes using CURL. Here is an example of testing the `massbot/ping` route when the Web Server is launched using `HTTP` and port `3002`:
 
 ```bash
 
-$ curl -X GET http://localhost:3002/botsample/ping
+$ curl -X GET http://localhost:3002/massbot/ping
 > {"code":0}
 
 ```
@@ -72,11 +76,24 @@ $ curl -X GET http://localhost:3002/botsample/ping
 Note: When testing in HTTPS, default self-signed certificates are proposed. For testing with CURL, you have to add the parameter `-k` to avoid the CURL's verification like as follows (launched with `HTTPS` and port `3003`):
 
 ```bash
-$ curl -X GET https://localhost:3003/botsample/ping -k
+$ curl -X GET https://localhost:3003/massbot/ping -k
 > {"code":0}
 
 ```
 
+For make a call you can use this commands for test.
+
+```bash
+$ curl -d "{\"phone\": \"2150\"}" -H "Content-Type: application/json" -X POST http://localhost:3002/massbot/call/makeCallPhoneNumber
+> {"code":0}
+
+```
+
+```bash
+$ curl -d "{\"email\": \"email@email.es\", \"phone\": \"2150\"}" -H "Content-Type: application/json" -X POST http://localhost:3002/massbot/call/makeCall
+> {"code":0}
+
+```
 
 ## Environment
 
